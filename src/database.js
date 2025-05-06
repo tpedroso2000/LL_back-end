@@ -1,18 +1,26 @@
 // src/database.js
 require('dotenv').config();
-const mysql = require('mysql2');
+const sql = require('mssql');
 
-// Cria um pool de conexões
-const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT,
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
-});
+// Constrói a configuração a partir da string no .env
+const config = {
+  connectionString: process.env.DB_CONN_STR,
+  options: {
+    encrypt: true,            // use true se você estiver no Azure
+    trustServerCertificate: true  // ajuste conforme seu ambiente
+  }
+};
 
-// Exporta o pool para ser utilizado no app
-module.exports = { pool };
+// Cria um pool único e exporta a promessa de conexão
+const poolPromise = new sql.ConnectionPool(config)
+  .connect()
+  .then(pool => {
+    console.log('✅ Conectado ao SQL Server');
+    return pool;
+  })
+  .catch(err => {
+    console.error('❌ Falha ao conectar no SQL Server:', err);
+    throw err;
+  });
+
+module.exports = { sql, poolPromise };

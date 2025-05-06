@@ -1,0 +1,37 @@
+# Node.js dependencies
+
+node\_modules/
+
+# Local environment files
+
+.env
+
+# Log files
+
+logs/
+*.log
+npm-debug.log*
+
+# OS generated files
+
+.DS\_Store
+Thumbs.db
+
+# IDE/editor directories
+
+.vscode/
+.idea/
+
+# PM2 process files
+
+pids/
+\*.pid
+pm2.log
+
+# Coverage and reports
+
+coverage/
+
+# Azure Functions local settings
+
+.local.settings.json
